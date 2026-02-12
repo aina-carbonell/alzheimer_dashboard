@@ -5,8 +5,8 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { StatCard } from "@/components/cards/StatCard";
 import { InfoCard } from "@/components/cards/InfoCard";
 import { FilterSidebar } from "@/components/filters/FilterSidebar";
-import { useFilters } from "@/contexts/FilterContext";
-import { diagnosisLabels } from "@/data/alzheimerData";
+import { useFilters } from "@/context/FilterContext";
+import { diagnosisLabels, diagnosisToNumeric, CONSTANTS } from "@/types/patient";
 import { Brain, TrendingUp, Activity } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 

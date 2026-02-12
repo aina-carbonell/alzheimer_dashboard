@@ -176,19 +176,8 @@ npm run test:coverage
 npm run test:watch
 ```
 
-## 📈 Millores Implementades
+## 📈 Futures Millores
 
-### Versió Actual
-1. ✅ Pàgines completes (Index, Gènere, Educació)
-2. ✅ Hook personalitzat per dades
-3. ✅ Sistema de filtres global
-4. ✅ Animacions fluïdes
-5. ✅ Components de càrrega
-6. ✅ Error handling
-7. ✅ Responsive design
-8. ✅ Documentació completa
-
-### Futures Millores
 - [ ] Exportar gràfics com a PNG
 - [ ] Comparador de pacients
 - [ ] Predicció amb ML
@@ -224,7 +213,7 @@ Aquest projecte està sota llicència MIT.
 
 ## 👥 Autors
 
-- Desenvolupador Principal - Anàlisi de dades Alzheimer
+- Aina Carbonell
 
 ## 🙏 Agraïments
 

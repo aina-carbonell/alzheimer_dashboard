@@ -5,9 +5,10 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { StatCard } from "@/components/cards/StatCard";
 import { InfoCard } from "@/components/cards/InfoCard";
 import { FilterSidebar } from "@/components/filters/FilterSidebar";
-import { useFilters } from "@/contexts/FilterContext";
+import { useFilters } from "@/context/FilterContext";
 import { TrendingUp, Activity, Calendar } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { diagnosisLabels, diagnosisToNumeric, CONSTANTS } from "@/types/patient";
 
 const Edat = () => {
   const { filteredPatients } = useFilters();

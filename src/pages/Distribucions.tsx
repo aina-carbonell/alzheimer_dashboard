@@ -6,7 +6,8 @@ import { BarChart3 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useFilters } from "@/contexts/FilterContext";
+import { useFilters } from "@/context/FilterContext";
+import { diagnosisLabels, diagnosisToNumeric, CONSTANTS } from "@/types/patient";
 
 const Distribucions = () => {
   const { filteredPatients } = useFilters();
