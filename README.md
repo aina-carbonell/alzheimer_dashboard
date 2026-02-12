@@ -1,6 +1,28 @@
-# 🧠 Explorador d'Alzheimer - Dataset OASIS
+# 🧠 Explorador d'Alzheimer amb Deep Learning - Dataset OASIS
 
-Aplicació web interactiva per a l'anàlisi i visualització de dades sobre la malaltia d'Alzheimer utilitzant el dataset OASIS (Open Access Series of Imaging Studies).
+Aplicació web interactiva per a l'anàlisi i visualització de dades sobre la malaltia d'Alzheimer utilitzant el dataset OASIS (Open Access Series of Imaging Studies), amb un **model de Deep Learning** per a la detecció precoz.
+
+## 🌟 NOVA FUNCIONALITAT: Deep Learning
+
+### 🤖 Model Predictiu d'Alzheimer
+La nova pàgina de **Deep Learning** implementa un model de xarxa neuronal per predir el diagnòstic d'Alzheimer basant-se en dades clíniques:
+
+- **Entrenament interactiu**: Configura hiperparàmetres (epochs, learning rate, batch size) i entrena el model en temps real
+- **Visualització de mètriques**: Gràfics d'accuracy i loss durant l'entrenament (training i validation)
+- **Prediccions en temps real**: Introdueix dades d'un pacient i obté un diagnòstic predit amb probabilitats
+- **Arquitectura**: Xarxa neuronal amb 3 capes ocultes (64→32→16 neurones) i sortida softmax
+
+#### Variables d'entrada del model:
+- **Edat** (18-100 anys)
+- **Gènere** (M/F)
+- **Nivell educatiu** (0-5)
+- **MMSE** (Mini-Mental State Examination, 0-30)
+- **nWBV** (Volum cerebral normalitzat, 0-1)
+
+#### Classes de sortida:
+- **Sense Demència** (NonDemented)
+- **Demència Molt Lleu** (VeryMildDemented)
+- **Demència Lleu** (MildDemented)
 
 ## 📊 Característiques Principals
 
@@ -42,7 +64,13 @@ Aplicació web interactiva per a l'anàlisi i visualització de dades sobre la m
    - Anàlisi de normalitat
    - Outliers i valors atípics
 
-7. **Conclusions** 📝
+7. **🆕 Deep Learning** 🤖
+   - Model de xarxa neuronal per predicció
+   - Entrenament interactiu amb visualització de mètriques
+   - Prediccions amb probabilitats per classe
+   - Explicació de l'arquitectura i funcionament
+
+8. **Conclusions** 📝
    - Resum de trobades principals
    - Limitacions de l'estudi
    - Implicacions clíniques
@@ -81,6 +109,7 @@ src/
 │   ├── Educacio.tsx         # Anàlisi educatiu
 │   ├── Atrofia.tsx          # Anàlisi volum cerebral
 │   ├── Distribucions.tsx    # Distribucions estadístiques
+│   ├── DeepLearning.tsx     # Model de Deep Learning
 │   └── Conclusions.tsx      # Conclusions finals
 ├── lib/
 │   └── utils.ts             # Utilitats
@@ -150,6 +179,8 @@ El dataset conté **192 pacients** amb les següents variables:
 - ✅ Tabs per canviar entre visualitzacions
 - ✅ Animacions amb Framer Motion
 - ✅ Responsive design
+- ✅ Entrenament interactiu de models
+- ✅ Prediccions en temps real
 
 ### Accessibilitat
 - ✅ Paleta de colors contrastada
@@ -163,27 +194,45 @@ El dataset conté **192 pacients** amb les següents variables:
 - ✅ Optimització de re-renders
 - ✅ Code splitting
 
-## 🧪 Testing
+## 🤖 Model de Deep Learning
 
-```bash
-# Executar tests
-npm run test
-
-# Tests amb coverage
-npm run test:coverage
-
-# Tests en mode watch
-npm run test:watch
+### Arquitectura
 ```
+Input Layer (5 neurones)
+    ↓
+Hidden Layer 1 (64 neurones) + ReLU
+    ↓
+Hidden Layer 2 (32 neurones) + ReLU
+    ↓
+Hidden Layer 3 (16 neurones) + ReLU
+    ↓
+Output Layer (3 neurones) + Softmax
+```
+
+### Hiperparàmetres Configurables
+- **Èpoques**: 10-100 (per defecte: 50)
+- **Learning Rate**: 0.0001, 0.001, 0.01 (per defecte: 0.001)
+- **Batch Size**: 8, 16, 32 (per defecte: 16)
+- **Validation Split**: 20%
+
+### Mètriques Visualitzades
+- **Accuracy** (training i validation)
+- **Loss** (training i validation)
+- **Probabilitats per classe**
+- **Confiança de la predicció**
+
+## ⚠️ Avís Important
+
+El model de Deep Learning implementat en aquesta aplicació és **només amb finalitats educatives i de demostració**. Les prediccions generades **NO substitueixen un diagnòstic mèdic professional** i no han de ser utilitzades per prendre decisions clíniques.
 
 ## 📈 Futures Millores
 
-- [ ] Exportar gràfics com a PNG
+- [ ] Implementació de model real amb TensorFlow.js
 - [ ] Comparador de pacients
-- [ ] Predicció amb ML
+- [ ] Cross-validation del model
+- [ ] Feature importance analysis
 - [ ] Més tipus de gràfics
 - [ ] Internacionalització (i18n)
-- [ ] Mode fosc
 - [ ] PWA support
 
 ## 📝 Scripts Disponibles
@@ -228,4 +277,4 @@ Per qualsevol dubte o suggeriment, no dubtis en contactar!
 
 ---
 
-**Fet amb ❤️ i ☕ per a la investigació sobre Alzheimer**
+**Fet amb ❤️, ☕ i 🤖 per a la investigació sobre Alzheimer**
