@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Brain, Users, GraduationCap, TrendingUp, FileText, Home, Menu, X, BarChart3 } from "lucide-react";
+import { Brain, Users, GraduationCap, TrendingUp, FileText, Home, Menu, X, BarChart3, BrainCircuit } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   { path: "/educacio", label: "Educació", icon: GraduationCap },
   { path: "/edat", label: "Edat", icon: TrendingUp },
   { path: "/distribucions", label: "Distribucions", icon: BarChart3 },
+  { path: "/deeplearning", label: "DeepLearning", icon: BrainCircuit },
   { path: "/conclusions", label: "Conclusions", icon: FileText },
 ];
 

@@ -10,6 +10,7 @@ import Edat from "./pages/Edat";
 import Distribucions from "./pages/Distribucions";
 import Conclusions from "./pages/Conclusions";
 import NotFound from "./pages/NotFound";
+import DeepLearning from "./pages/DeepLearning";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
                     <Route path="/educacio" element={<Educacio />} />
                     <Route path="/edat" element={<Edat />} />
                     <Route path="/distribucions" element={<Distribucions />} />
+                    <Route path="/deeplearning" element={<DeepLearning />} />
                     <Route path="/conclusions" element={<Conclusions />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

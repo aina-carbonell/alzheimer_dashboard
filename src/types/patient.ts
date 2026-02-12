@@ -91,6 +91,13 @@ export const diagnosisLabels: Record<Patient['diagnosis'], string> = {
     'ModerateDemented': 'Demència moderada',
 };
 
+export const diagnosisColors: Record<Patient['diagnosis'], string> = {
+    'NonDemented': '#22c55e',
+    'VeryMildDemented': '#facc15',
+    'MildDemented': '#f97316',
+    'ModerateDemented': '#ef4444',
+};
+
 export const genderLabels: Record<'M' | 'F', string> = {
     'M': 'Home',
     'F': 'Dona',
