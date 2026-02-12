@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import { Patient, parsePatient, PatientStats, calculateStats } from './patient';
+import { Patient, parsePatient, PatientStats, calculateStats } from '@/types/patient';
 
 interface UseAlzheimerDataReturn {
   patients: Patient[];

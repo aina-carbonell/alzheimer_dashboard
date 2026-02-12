@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { useFilters } from "@/contexts/FilterContext";
+import { useFilters } from "@/context/FilterContext";
 import { diagnosisLabels, Patient } from "@/data/alzheimerData";
 import { motion } from "framer-motion";
 

@@ -1,4 +1,4 @@
-import { useFilters } from "@/contexts/FilterContext";
+import { useFilters } from "@/context/FilterContext";
 import { diagnosisLabels, Patient } from "@/data/alzheimerData";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";

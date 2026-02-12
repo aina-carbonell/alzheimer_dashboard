@@ -1,95 +1,163 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { 
     Patient, 
     PatientFilters, 
     filterPatients, 
     calculateStats, 
-    PatientStats 
+    PatientStats,
+    diagnosisLabels,
+    genderLabels,
+    CONSTANTS
 } from '@/types/patient';
 import { useAlzheimerData } from '@/hooks/useAlzheimerData';
 
+interface FilterState {
+  ageRange: [number, number];
+  genders: ('M' | 'F')[];
+  diagnoses: Patient['diagnosis'][];
+}
+
 interface FilterContextType {
-    // Estat
-    filters: PatientFilters;
-    setFilters: (filters: PatientFilters) => void;
+    filters: FilterState;
+    setAgeRange: (range: [number, number]) => void;
+    toggleGender: (gender: 'M' | 'F') => void;
+    toggleDiagnosis: (diagnosis: Patient['diagnosis']) => void;
     resetFilters: () => void;
-    
-    // Dades
-    allPatients: Patient[];
     filteredPatients: Patient[];
-    stats: PatientStats;
+    minAge: number;
+    maxAge: number;
     
-    // Estat de càrrega
+    allPatients: Patient[];
+    stats: PatientStats;
     loading: boolean;
     error: string | null;
-    
-    // Mètriques
     uniqueValues: {
         genders: ('M' | 'F')[];
         diagnoses: Patient['diagnosis'][];
         ageRange: { min: number; max: number };
     };
+    
+    setFilters: (filters: PatientFilters) => void;
 }
+
+const initialFilters: FilterState = {
+  ageRange: [CONSTANTS.AGE_MIN, CONSTANTS.AGE_MAX],
+  genders: ['M', 'F'],
+  diagnoses: ['NonDemented', 'VeryMildDemented', 'MildDemented', 'ModerateDemented'],
+};
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
-const initialFilters: PatientFilters = {
-    gender: null,
-    diagnosis: null,
-    ageMin: undefined,
-    ageMax: undefined,
-    educationMin: undefined,
-    educationMax: undefined,
-};
-
 export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     const { patients: allPatients, loading, error } = useAlzheimerData();
-    const [filters, setFilters] = useState<PatientFilters>(initialFilters);
-    const [filteredPatients, setFilteredPatients] = useState<Patient[]>([]);
-    const [stats, setStats] = useState<PatientStats>({
-        total: 0,
-        demented: 0,
-        dementiaRate: 0,
-        avgAge: 0,
-        avgMMSE: 0,
-        avgNWBV: 0,
-        femaleCount: 0,
-        maleCount: 0,
+    
+    const [filters, setFiltersState] = useState<FilterState>(initialFilters);
+    
+    const [newFilters, setNewFilters] = useState<PatientFilters>({
+        gender: null,
+        diagnosis: null,
+        ageMin: undefined,
+        ageMax: undefined,
+        educationMin: undefined,
+        educationMax: undefined,
     });
 
-    // Valors únics per filtres
+    const setAgeRange = (range: [number, number]) => {
+        setFiltersState(prev => ({ ...prev, ageRange: range }));
+        setNewFilters(prev => ({ ...prev, ageMin: range[0], ageMax: range[1] }));
+    };
+
+    const toggleGender = (gender: 'M' | 'F') => {
+        setFiltersState(prev => ({
+            ...prev,
+            genders: prev.genders.includes(gender)
+                ? prev.genders.filter(g => g !== gender)
+                : [...prev.genders, gender],
+        }));
+        setNewFilters(prev => ({ ...prev, gender: null })); 
+    };
+
+    const toggleDiagnosis = (diagnosis: Patient['diagnosis']) => {
+        setFiltersState(prev => ({
+            ...prev,
+            diagnoses: prev.diagnoses.includes(diagnosis)
+                ? prev.diagnoses.filter(d => d !== diagnosis)
+                : [...prev.diagnoses, diagnosis],
+        }));
+        setNewFilters(prev => ({ ...prev, diagnosis: null }));
+    };
+
+    const resetFilters = () => {
+        setFiltersState(initialFilters);
+        setNewFilters({
+            gender: null,
+            diagnosis: null,
+            ageMin: undefined,
+            ageMax: undefined,
+            educationMin: undefined,
+            educationMax: undefined,
+        });
+    };
+
+    const setFilters = (filters: PatientFilters) => {
+        setNewFilters(filters);
+        const ageMin = filters.ageMin ?? CONSTANTS.AGE_MIN;
+        const ageMax = filters.ageMax ?? CONSTANTS.AGE_MAX;
+        setFiltersState(prev => ({
+            ...prev,
+            ageRange: [ageMin, ageMax],
+        }));
+    };
+
+    const filteredPatients = useMemo(() => {
+        if (allPatients.length === 0) return [];
+        
+        return allPatients.filter(p => {
+            const ageMatch = p.age >= filters.ageRange[0] && p.age <= filters.ageRange[1];
+            const genderMatch = filters.genders.includes(p.gender);
+            const diagnosisMatch = filters.diagnoses.includes(p.diagnosis);
+            return ageMatch && genderMatch && diagnosisMatch;
+        });
+    }, [filters, allPatients]);
+
+    const stats = useMemo(() => {
+        return calculateStats(filteredPatients);
+    }, [filteredPatients]);
+
     const uniqueValues = {
         genders: ['M', 'F'] as ('M' | 'F')[],
         diagnoses: ['NonDemented', 'VeryMildDemented', 'MildDemented', 'ModerateDemented'] as Patient['diagnosis'][],
         ageRange: {
-            min: Math.min(...allPatients.map(p => p.age), 60),
-            max: Math.max(...allPatients.map(p => p.age), 98),
+            min: allPatients.length > 0 ? Math.min(...allPatients.map(p => p.age)) : CONSTANTS.AGE_MIN,
+            max: allPatients.length > 0 ? Math.max(...allPatients.map(p => p.age)) : CONSTANTS.AGE_MAX,
         },
     };
 
-    // Aplicar filtres
-    useEffect(() => {
-        if (allPatients.length > 0) {
-            const filtered = filterPatients(allPatients, filters);
-            setFilteredPatients(filtered);
-            setStats(calculateStats(filtered));
-        }
-    }, [filters, allPatients]);
+    const minAge = uniqueValues.ageRange.min;
+    const maxAge = uniqueValues.ageRange.max;
 
-    const resetFilters = () => setFilters(initialFilters);
+    const value: FilterContextType = {
+        // Estat antic
+        filters,
+        setAgeRange,
+        toggleGender,
+        toggleDiagnosis,
+        resetFilters,
+        filteredPatients,
+        minAge,
+        maxAge,
+        
+        // Estat nou
+        allPatients,
+        stats,
+        loading,
+        error,
+        uniqueValues,
+        setFilters,
+    };
 
     return (
-        <FilterContext.Provider value={{
-            filters,
-            setFilters,
-            resetFilters,
-            allPatients,
-            filteredPatients,
-            stats,
-            loading,
-            error,
-            uniqueValues,
-        }}>
+        <FilterContext.Provider value={value}>
             {children}
         </FilterContext.Provider>
     );
@@ -98,7 +166,7 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
 export const useFilters = () => {
     const context = useContext(FilterContext);
     if (!context) {
-        throw new Error('useFilters must be used within FilterProvider');
+        throw new Error("useFilters must be used within a FilterProvider");
     }
     return context;
 };
